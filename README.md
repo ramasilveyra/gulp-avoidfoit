@@ -9,7 +9,7 @@ Scans your css files and generates the JS code to load all the webfonts with Fon
 First, install `gulp-replace` as a development dependency:
 
 ```shell
-npm install --save-dev gulp-replace
+npm install --save-dev gulp-avoidfoit
 ```
 
 Then, add it to your `gulpfile.js`:
@@ -90,7 +90,9 @@ Default: `true`
 
 Add the fontfaceobserver.standalone.js or fontfaceobserver.js version of polyfill.
 
-## Minor pitfalls
-When I have more time I fix this pitfalls
-* You have to use ´gulp-rename´ to change the name of file.
+## Minor errors
+
+When I have more time I fix this errors:
+
+* You have to use `gulp-rename` to change the name of file.
 * There is a sync line!!

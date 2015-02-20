@@ -1,6 +1,6 @@
 {
   "name": "gulp-avoidfoit",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Scans your css files and generates the JS code to load all the webfonts with Fonts Events to avoid FOIT (Flash of Invisible Text) and to improve performance.",
   "main": "index.js",
   "keywords": [
