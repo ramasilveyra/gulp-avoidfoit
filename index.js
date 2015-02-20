@@ -14,7 +14,7 @@ function avoidfoit(cssContent, options) {
       className: 'fonts-loaded',
       legacy: true
     },
-    fontfaceobserver = options.legacy ? 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.standalone.js' : 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.js';
+    fontfaceobserver = '';
 
   // Manage plugin options
   options = options || defaultOptions;
@@ -22,6 +22,7 @@ function avoidfoit(cssContent, options) {
   options.legacy = options.legacy !== "undefined" ? options.legacy : defaultOptions.legacy;
 
   // Get fontfaceobserver.js content
+  fontfaceobserver = options.legacy ? 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.standalone.js' : 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.js';
   jsCode += fs.readFileSync(fontfaceobserver, 'utf8'); // Yep, this is ugly :(
 
   // Generates the custom js code
