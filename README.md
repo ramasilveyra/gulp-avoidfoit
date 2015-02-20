@@ -26,7 +26,7 @@ gulp.task('js:fonts', function() {
 
 ## Example
 
-If in your CSS has:
+If your CSS has:
 
 ```css
 @font-face {
