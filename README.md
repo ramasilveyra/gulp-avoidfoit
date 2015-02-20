@@ -6,7 +6,7 @@ Scans your css files and generates the JS code to load all the webfonts with Fon
 
 ## Install and Usage
 
-First, install `gulp-replace` as a development dependency:
+First, install `gulp-avoidfoit` as a development dependency:
 
 ```shell
 npm install --save-dev gulp-avoidfoit
