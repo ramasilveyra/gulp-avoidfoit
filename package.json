@@ -1,6 +1,6 @@
 {
   "name": "gulp-avoidfoit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scans your css files and generates the JS code to load all the webfonts with Fonts Events to avoid FOIT (Flash of Invisible Text) and to improve performance.",
   "main": "index.js",
   "keywords": [
@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "css": "^2.1.0",
-    "fontfaceobserver": "^1.3.0",
-    "through2": "^0.6.3",
-    "gulp-util": "^3.0.3"
+    "fontfaceobserver": "^1.4.12",
+    "gulp-util": "^3.0.5",
+    "through2": "^0.6.5"
   }
 }

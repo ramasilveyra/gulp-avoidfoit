@@ -15,11 +15,17 @@ npm install --save-dev gulp-avoidfoit
 Then, add it to your `gulpfile.js`:
 
 ```javascript
+var gulp = require('gulp');
 var avoidfoit = require('gulp-avoidfoit');
+var rename = require('gulp-rename');
 
 gulp.task('js:fonts', function() {
   return gulp.src('./dist/assets/styles/main.css')
     .pipe(avoidfoit())
+    .pipe(rename({
+      basename: 'typography',
+      extname: '.js'
+    }))
     .pipe(gulp.dest('./dist/assets/scripts/vendor'));
 });
 ```
@@ -55,18 +61,17 @@ The output of JS code is:
 /*  Bram Stein’s FontFaceObserver script here */
 (function( w ) {
   if( w.document.documentElement.className.indexOf( "fonts-loaded" ) > -1 ) {
-    return;
+    var fonts = 3;
+    var checkFonts = function() {
+      fonts--;
+      if (!fonts)  {
+        w.document.documentElement.className += " fonts-loaded";
+      }
+    };
+    var font0 = new w.FontFaceObserver( 'Roboto', {}).check().then(checkFonts);
+    var font1 = new w.FontFaceObserver( 'Roboto', {"weight":"500"}).check().then(checkFonts);
+    var font2 = new w.FontFaceObserver( 'Open Sans', {"style":"italic"}).check().then(checkFonts);
   }
-
-  var font0 = new w.FontFaceObserver( 'Roboto', {});
-  var font1 = new w.FontFaceObserver( 'Roboto', {"weight":"500"});
-  var font2 = new w.FontFaceObserver( 'Open Sans', {"style":"italic"});
-
-  w.Promise
-    .all([font0.check(), font1.check(), font2.check()])
-    .then(function() {
-      w.document.documentElement.className += " fonts-loaded";
-    });
 }( this ));
 ```
 
@@ -83,12 +88,6 @@ Type: `string`
 Default: `fonts-loaded`
 
 The class name to add in the html element when all fonts are loaded.
-
-##### options.legacy
-Type: `boolean`  
-Default: `true`
-
-Add the fontfaceobserver.standalone.js or fontfaceobserver.js version of polyfill.
 
 ## Minor errors
 

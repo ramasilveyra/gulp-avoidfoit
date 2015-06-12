@@ -8,28 +8,45 @@ var PluginError = gutil.PluginError;
 
 var PLUGIN_NAME = 'gulp-avoidfoit';
 
-function avoidfoit(cssContent, options) {
-  var jsCode = '',
-    defaultOptions = {
-      className: 'fonts-loaded',
-      legacy: true
-    },
-    fontfaceobserver = '';
+/**
+ * Merge defaults with user options
+ *
+ * @private
+ * @param {Object} defaults Default settings
+ * @param {Object} options User options
+ * @returns {Object} Merged values of defaults and options
+ */
+var extend = function (defaults, options) {
+  var extended = {};
+  var prop;
+  for (prop in defaults) {
+    if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+      extended[prop] = defaults[prop];
+    }
+  }
+  for (prop in options) {
+    if (Object.prototype.hasOwnProperty.call(options, prop)) {
+      extended[prop] = options[prop];
+    }
+  }
+  return extended;
+};
+
+function avoidfoit(cssContent, userOptions) {
+  var jsCode = '';
+  var defaultOptions = {
+    className: 'fonts-loaded'
+  };
 
   // Manage plugin options
-  options = options || defaultOptions;
-  options.className = options.className !== "undefined" ? options.className : defaultOptions.className;
-  options.legacy = options.legacy !== "undefined" ? options.legacy : defaultOptions.legacy;
+  var options = extend(defaultOptions, userOptions);
 
   // Get fontfaceobserver.js content
-  fontfaceobserver = options.legacy ? 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.standalone.js' : 'node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.js';
-  jsCode += fs.readFileSync(fontfaceobserver, 'utf8'); // Yep, this is ugly :(
+  jsCode += fs.readFileSync('node_modules/gulp-avoidfoit/node_modules/fontfaceobserver/fontfaceobserver.js', 'utf8'); // Yep, this is ugly :(
 
   // Generates the custom js code
   (function () {
-    var webFonts = [],
-      promiseAll = [];
-    jsCode += '(function (w){if( w.document.documentElement.className.indexOf( "' + options.className + '") > -1){return;}';
+    var webFonts = [];
     // Scan and parse all css to json
     css.parse(cssContent)
       // Filter to get only @font-face rules
@@ -51,13 +68,13 @@ function avoidfoit(cssContent, options) {
           }
         });
       });
+    jsCode += '!function(e){if(!(e.document.documentElement.className.indexOf("' + options.className + '")>-1)){var n=' + webFonts.length + ',t=function(){n--,n||(e.document.documentElement.className+=" ' + options.className + '")};';
     // Generates a FontFaceObserver instace for each webfont
     webFonts.forEach(function (font, fontIndex) {
-      promiseAll.push('font' + fontIndex + '.check()');
-      jsCode += 'var font' + fontIndex + ' = new w.FontFaceObserver( ' + font[0] + ', ' + JSON.stringify(font[1]) + ');';
+      jsCode += 'var font' + fontIndex + '=new e.FontFaceObserver(' + font[0] + ', ' + JSON.stringify(font[1]) + ').check().then(t);';
     });
     // Add final js code
-    jsCode += 'w.Promise.all([' + promiseAll + ']).then(function (){w.document.documentElement.className += " ' + options.className + '";});}(this));';
+    jsCode += '}}(this);';
   }());
   return jsCode;
 }
